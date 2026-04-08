@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Precision Outreach</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0e0e0e;
+  --surface: #161616;
+  --card: #1c1c1c;
+  --border: #2a2a2a;
+  --border2: #383838;
+  --ink: #f0ece4;
+  --ink2: #9e9890;
+  --ink3: #5a5650;
+  --accent: #d4a853;
+  --accent2: #b8924a;
+  --green: #4caf80;
+  --red: #e05c5c;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --mono: 'Geist Mono', 'Courier New', monospace;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--mono); min-height: 100vh; }
+.page { max-width: 680px; margin: 0 auto; padding: 4rem 2rem 8rem; }
+
+.eyebrow { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+.hero-title { font-family: var(--serif); font-size: clamp(48px, 8vw, 72px); font-weight: 400; line-height: 0.95; color: var(--ink); margin-bottom: 20px; }
+.hero-title em { font-style: italic; color: var(--accent); }
+.hero-sub { font-size: 13px; color: var(--ink2); line-height: 1.7; max-width: 480px; margin-bottom: 40px; }
+
+.how { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 48px; }
+.how-step { background: var(--surface); padding: 16px; }
+.how-num { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.how-text { font-size: 12px; color: var(--ink2); line-height: 1.6; }
+
+.divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+.section { margin-bottom: 28px; }
+.section-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink3); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 11px; color: var(--ink3); letter-spacing: 0.06em; }
+.field input { font-family: var(--mono); font-size: 13px; padding: 10px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; color: var(--ink); transition: border-color 0.15s; width: 100%; }
+.field input:focus { outline: none; border-color: var(--accent); }
+.field input::placeholder { color: var(--ink3); }
+
+.upload-lede { font-size: 13px; color: var(--ink2); line-height: 1.7; margin-bottom: 16px; }
+.upload-lede strong { color: var(--ink); font-weight: 500; }
+
+.upload-steps { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 12px; }
+.upload-step { display: flex; gap: 12px; align-items: flex-start; }
+.upload-step-num { width: 20px; height: 20px; border-radius: 50%; background: var(--card); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+.upload-step-text { font-size: 12px; color: var(--ink2); line-height: 1.65; }
+.upload-step-text strong { color: var(--ink); font-weight: 500; }
+.upload-step-text code { font-family: var(--mono); font-size: 11px; background: var(--card); border: 1px solid var(--border2); padding: 1px 5px; border-radius: 3px; color: var(--accent); }
+
+.upload-zone { border: 1.5px dashed var(--border2); border-radius: 8px; padding: 2rem 1.5rem; text-align: center; cursor: pointer; position: relative; transition: border-color 0.2s, background 0.2s; background: var(--surface); }
+.upload-zone:hover { border-color: var(--accent); background: #131208; }
+.upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.upload-icon { font-size: 26px; margin-bottom: 10px; color: var(--ink3); }
+.uz-title { font-size: 14px; color: var(--ink); margin-bottom: 4px; }
+.uz-sub { font-size: 11px; color: var(--ink3); }
+.uz-count { display: inline-block; margin-top: 12px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); background: #1a1608; border: 1px solid #38300e; padding: 4px 12px; border-radius: 20px; }
+
+.thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.thumb { display: flex; align-items: center; gap: 7px; padding: 6px 10px; background: var(--card); border: 1px solid var(--border2); border-radius: 5px; font-size: 11px; color: var(--ink2); }
+.thumb-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+.thumb-rm { cursor: pointer; color: var(--ink3); margin-left: 4px; font-size: 15px; line-height: 1; transition: color 0.1s; }
+.thumb-rm:hover { color: var(--red); }
+
+.btn { width: 100%; padding: 14px; font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; background: var(--accent); color: #0e0e0e; border: none; border-radius: 6px; cursor: pointer; transition: background 0.15s, transform 0.1s; }
+.btn:hover { background: var(--accent2); }
+.btn:active { transform: scale(0.995); }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+#output { margin-top: 28px; }
+
+.loading-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; text-align: center; }
+.loading-label { font-size: 11px; color: var(--ink3); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 14px; }
+.dot-anim span { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin: 0 3px; animation: blink 1.3s ease-in-out infinite; }
+.dot-anim span:nth-child(2) { animation-delay: 0.22s; }
+.dot-anim span:nth-child(3) { animation-delay: 0.44s; }
+@keyframes blink { 0%,80%,100%{opacity:0.15;transform:scale(0.6)} 40%{opacity:1;transform:scale(1)} }
+
+.out-block { margin-bottom: 14px; }
+.out-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.out-card-hd { padding: 10px 16px; border-bottom: 1px solid var(--border); }
+.out-card-hd-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink3); }
+.out-card-body { padding: 18px; }
+
+.contact-row { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+.avatar { width: 42px; height: 42px; border-radius: 50%; background: #1a1608; border: 1px solid #38300e; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; color: var(--accent); flex-shrink: 0; }
+.contact-name { font-family: var(--serif); font-size: 20px; color: var(--ink); margin-bottom: 3px; }
+.contact-title { font-size: 11px; color: var(--ink3); letter-spacing: 0.04em; }
+.contact-reason { font-size: 12px; color: var(--ink2); line-height: 1.7; padding-top: 14px; border-top: 1px solid var(--border); }
+
+.msg-list { display: flex; flex-direction: column; gap: 10px; }
+.msg-card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.msg-hd { padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.msg-variant { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink3); }
+.char-ok { font-size: 10px; font-weight: 500; color: var(--green); }
+.char-over { font-size: 10px; font-weight: 500; color: var(--red); }
+.msg-body { padding: 14px; font-size: 13px; line-height: 1.7; color: var(--ink); }
+.msg-ft { padding: 8px 14px; border-top: 1px solid var(--border); }
+.copy-btn { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 12px; background: transparent; border: 1px solid var(--border2); border-radius: 4px; color: var(--ink3); cursor: pointer; transition: color 0.1s, border-color 0.1s; }
+.copy-btn:hover { color: var(--ink); border-color: var(--accent); }
+.copy-btn.copied { color: var(--green); border-color: var(--green); }
+
+.regen-btn { width: 100%; margin-top: 12px; padding: 11px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; background: transparent; border: 1px solid var(--border2); border-radius: 6px; color: var(--ink3); cursor: pointer; transition: color 0.1s, border-color 0.1s; }
+.regen-btn:hover { color: var(--ink); border-color: var(--border2); }
+
+.error-box { background: #1a0e0e; border: 1px solid #4a2020; border-radius: 6px; padding: 16px; font-size: 12px; color: var(--red); line-height: 1.6; }
+
+.footer-note { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); font-size: 11px; color: var(--ink3); line-height: 1.8; }
+.footer-note strong { color: var(--ink2); font-weight: 500; }
+
+@media(max-width:500px) { .how { grid-template-columns: 1fr; } .fields { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div style="margin-bottom:48px;">
+    <div class="eyebrow">Job Search Tool</div>
+    <h1 class="hero-title">Precision<br><em>Outreach</em></h1>
+    <p class="hero-sub">Cold portal applications convert at near zero. This tool does what actually works — after you apply, it identifies the right person to contact and writes a targeted message under 300 characters.</p>
+  </div>
+
+  <div class="how">
+    <div class="how-step">
+      <div class="how-num">01 — Apply</div>
+      <div class="how-text">Submit through the job portal first. Always.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">02 — Screenshot</div>
+      <div class="how-text">Take screenshots of the company's LinkedIn People page.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">03 — Send</div>
+      <div class="how-text">AI picks the contact and writes the message. You send it.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-label">01 — the role</div>
+    <div class="fields">
+      <div class="field">
+        <label>Company name</label>
+        <input type="text" id="company" placeholder="e.g. Hebbia" />
+      </div>
+      <div class="field">
+        <label>Role you applied to</label>
+        <input type="text" id="role" placeholder="e.g. Solutions Architect" />
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">02 — linkedin screenshots</div>
+    <p class="upload-lede">
+      Upload screenshots from the company's LinkedIn People page. <strong>The AI scans every visible person and identifies who is most likely to respond and help move your application forward.</strong> More screenshots = better signal.
+    </p>
+    <div class="upload-steps">
+      <div class="upload-step">
+        <div class="upload-step-num">1</div>
+        <div class="upload-step-text">
+          Go to the company LinkedIn page → <strong>People</strong> tab. Filter by <strong>country</strong> (United States or your location). Screenshot the employee list.
+        </div>
+      </div>
+      <div class="upload-step">
+        <div class="upload-step-num">2</div>
+        <div class="upload-step-text">
+          In the employee search bar, type <code>hiring</code> and screenshot. Then try <code>recruiting</code> and screenshot those results too.
+        </div>
+      </div>
+      <div class="upload-step">
+        <div class="upload-step-num">3</div>
+        <div class="upload-step-text">
+          Upload all screenshots below. <strong>2 is the minimum, up to 10 accepted.</strong> The more you provide, the more people the AI can evaluate.
+        </div>
+      </div>
+    </div>
+    <div class="upload-zone">
+      <input type="file" id="fileInput" accept="image/*" multiple />
+      <div class="upload-icon">↑</div>
+      <div class="uz-title">Drop screenshots here or click to upload</div>
+      <div class="uz-sub">PNG or JPG · 2 suggested · up to 10 accepted</div>
+      <div class="uz-count" id="uploadCount">0 / 10 uploaded</div>
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <button class="btn" id="genBtn">Identify contact + generate message →</button>
+
+  <div id="output"></div>
+
+  <div class="footer-note">
+    <strong>One message. One person. Under 300 characters.</strong> The goal isn't to impress — it's to get a response from someone who can move your application forward. Follow up once a few days later if no reply.
+  </div>
+
+</div>
+<script>
+var uploads = [];
+var fileInput = document.getElementById('fileInput');
+var thumbsEl  = document.getElementById('thumbs');
+var genBtn    = document.getElementById('genBtn');
+var output    = document.getElementById('output');
+var countEl   = document.getElementById('uploadCount');
+
+fileInput.addEventListener('change', function() {
+  Array.from(this.files).forEach(function(file) {
+    if (uploads.length >= 10) return;
+    if (uploads.some(function(u) { return u.name === file.name; })) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      uploads.push({ name: file.name, data: e.target.result });
+      renderThumbs();
+    };
+    reader.readAsDataURL(file);
+  });
+  fileInput.value = '';
+});
+
+function renderThumbs() {
+  countEl.textContent = uploads.length + ' / 10 uploaded';
+  thumbsEl.innerHTML = '';
+  uploads.forEach(function(u, i) {
+    var el = document.createElement('div');
+    el.className = 'thumb';
+    el.innerHTML = '<div class="thumb-dot"></div><span>' + esc(u.name) + '</span><span class="thumb-rm" data-i="' + i + '">×</span>';
+    el.querySelector('.thumb-rm').addEventListener('click', function() {
+      uploads.splice(parseInt(this.getAttribute('data-i')), 1);
+      renderThumbs();
+    });
+    thumbsEl.appendChild(el);
+  });
+}
+
+genBtn.addEventListener('click', function() {
+  var company = document.getElementById('company').value.trim();
+  var role    = document.getElementById('role').value.trim();
+  if (!company || !role) { alert('Please fill in company name and role.'); return; }
+  if (uploads.length === 0) { alert('Please upload at least one LinkedIn screenshot.'); return; }
+  runGenerate(company, role);
+});
+
+function runGenerate(company, role) {
+  genBtn.disabled = true;
+  genBtn.textContent = 'Analyzing...';
+  output.innerHTML = '<div class="loading-box"><div class="dot-anim"><span></span><span></span><span></span></div><div class="loading-label">Reading ' + uploads.length + ' screenshot' + (uploads.length !== 1 ? 's' : '') + ' — identifying best contact</div></div>';
+
+  var imageContent = uploads.map(function(u) {
+    return { type: 'image', source: { type: 'base64', media_type: u.data.split(';')[0].split(':')[1], data: u.data.split(',')[1] } };
+  });
+
+  var system = 'You are an expert job search strategist. Your job: look at LinkedIn People page screenshots, identify the single best person to contact after someone has applied for a role, then write 3 targeted outreach messages.\n\nCONTACT SELECTION — strict priority order:\n1. Senior HR/Talent: Head of Talent, VP People, Director of Recruiting, Senior Talent Partner, Senior Recruiter, People Ops Lead. First choice always — they route applications and expect outreach.\n2. If no senior HR/Talent visible: hiring manager or team lead whose function matches the role.\n3. Very small company (<20 people) with no HR layer: co-founder, CRO, COO, or relevant VP.\n4. NEVER select: anyone with Associate, Coordinator, Analyst, Intern, or junior-sounding titles. Avoid anyone who appears early in their career or recently hired. Target people who appear established and senior.\n5. Do not default to the CEO unless the company is tiny with no better option.\n\nMESSAGE RULES:\n- Address by first name only\n- Hard limit: under 300 characters per message\n- No filler phrases whatsoever\n- Reference something specific and real about the company or role\n- Sound like a sharp human, not a template\n\nRespond ONLY with valid JSON, no markdown, no backticks:\n{"contact":{"name":"full name","title":"their title","initials":"two uppercase initials","reason":"2-3 sentences: why this person by the rules above and what in the screenshot confirmed it"},"messages":{"primary":"under 300 chars","direct":"under 200 chars — stripped down","hook":"under 280 chars — leads with a specific angle"}}';
+
+  var userText = 'Company: ' + company + '\nRole applied to: ' + role + '\n\n' + uploads.length + ' screenshot(s) from ' + company + '\'s LinkedIn People page attached. Read every visible name and title. Apply selection rules. Pick one person. Write 3 message variants addressed to them by first name.';
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: system,
+      messages: [{ role: 'user', content: imageContent.concat([{ type: 'text', text: userText }]) }]
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.error) throw new Error(data.error.message);
+    var raw = (data.content || []).map(function(b) { return b.text || ''; }).join('');
+    renderResult(JSON.parse(raw.replace(/```json|```/g,'').trim()));
+  })
+  .catch(function(err) {
+    output.innerHTML = '<div class="error-box">Error: ' + esc(err.message) + '<br><br>If running from a local file, deploy to GitHub Pages or any https host — browsers block API calls from file:// URLs.</div>';
+  })
+  .finally(function() {
+    genBtn.disabled = false;
+    genBtn.textContent = 'Identify contact + generate message →';
+  });
+}
+
+function renderResult(r) {
+  var c = r.contact;
+  var msgs = [{ label:'Primary', text:r.messages.primary }, { label:'Direct', text:r.messages.direct }, { label:'Hook', text:r.messages.hook }];
+  var msgsHtml = msgs.map(function(v,i) {
+    var n = v.text.length, cls = n <= 300 ? 'char-ok' : 'char-over';
+    return '<div class="msg-card"><div class="msg-hd"><span class="msg-variant">'+v.label+'</span><span class="'+cls+'">'+n+' chars</span></div><div class="msg-body" id="mt'+i+'">'+esc(v.text)+'</div><div class="msg-ft"><button class="copy-btn" data-i="'+i+'">Copy</button></div></div>';
+  }).join('');
+
+  output.innerHTML =
+    '<div class="out-block"><div class="out-card"><div class="out-card-hd"><span class="out-card-hd-label">Recommended contact</span></div><div class="out-card-body"><div class="contact-row"><div class="avatar">'+esc(c.initials)+'</div><div><div class="contact-name">'+esc(c.name)+'</div><div class="contact-title">'+esc(c.title)+'</div></div></div><div class="contact-reason">'+esc(c.reason)+'</div></div></div></div>' +
+    '<div class="out-block"><div class="out-card"><div class="out-card-hd"><span class="out-card-hd-label">Message variants</span></div><div class="out-card-body"><div class="msg-list">'+msgsHtml+'</div></div></div></div>' +
+    '<button class="regen-btn" id="regenBtn">↺ Regenerate</button>';
+
+  document.querySelectorAll('.copy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var i = this.getAttribute('data-i'), self = this;
+      navigator.clipboard.writeText(document.getElementById('mt'+i).textContent).then(function() {
+        self.textContent = 'Copied!'; self.classList.add('copied');
+        setTimeout(function() { self.textContent = 'Copy'; self.classList.remove('copied'); }, 1500);
+      });
+    });
+  });
+  document.getElementById('regenBtn').addEventListener('click', function() {
+    runGenerate(document.getElementById('company').value.trim(), document.getElementById('role').value.trim());
+  });
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>
