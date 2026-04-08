@@ -8,14 +8,14 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #0e0e0e;
-  --surface: #161616;
-  --card: #1c1c1c;
-  --border: #2a2a2a;
-  --border2: #383838;
-  --ink: #f0ece4;
-  --ink2: #9e9890;
-  --ink3: #5a5650;
+  --bg: #0a0f1e;
+  --surface: #0f1628;
+  --card: #141c32;
+  --border: #1e2a45;
+  --border2: #2a3a5a;
+  --ink: #e8edf8;
+  --ink2: #8a9ab8;
+  --ink3: #4a5878;
   --accent: #d4a853;
   --accent2: #b8924a;
   --green: #4caf80;
@@ -60,12 +60,12 @@ body { background: var(--bg); color: var(--ink); font-family: var(--mono); min-h
 .upload-step-text code { font-family: var(--mono); font-size: 11px; background: var(--card); border: 1px solid var(--border2); padding: 1px 5px; border-radius: 3px; color: var(--accent); }
 
 .upload-zone { border: 1.5px dashed var(--border2); border-radius: 8px; padding: 2rem 1.5rem; text-align: center; cursor: pointer; position: relative; transition: border-color 0.2s, background 0.2s; background: var(--surface); }
-.upload-zone:hover { border-color: var(--accent); background: #131208; }
+.upload-zone:hover { border-color: var(--accent); background: #0f1830; }
 .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
 .upload-icon { font-size: 26px; margin-bottom: 10px; color: var(--ink3); }
 .uz-title { font-size: 14px; color: var(--ink); margin-bottom: 4px; }
 .uz-sub { font-size: 11px; color: var(--ink3); }
-.uz-count { display: inline-block; margin-top: 12px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); background: #1a1608; border: 1px solid #38300e; padding: 4px 12px; border-radius: 20px; }
+.uz-count { display: inline-block; margin-top: 12px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); background: #1a2040; border: 1px solid #2a3a5a; padding: 4px 12px; border-radius: 20px; }
 
 .thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .thumb { display: flex; align-items: center; gap: 7px; padding: 6px 10px; background: var(--card); border: 1px solid var(--border2); border-radius: 5px; font-size: 11px; color: var(--ink2); }
@@ -94,7 +94,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--mono); min-h
 .out-card-body { padding: 18px; }
 
 .contact-row { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
-.avatar { width: 42px; height: 42px; border-radius: 50%; background: #1a1608; border: 1px solid #38300e; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; color: var(--accent); flex-shrink: 0; }
+.avatar { width: 42px; height: 42px; border-radius: 50%; background: #1a2040; border: 1px solid #2a3a5a; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; color: var(--accent); flex-shrink: 0; }
 .contact-name { font-family: var(--serif); font-size: 20px; color: var(--ink); margin-bottom: 3px; }
 .contact-title { font-size: 11px; color: var(--ink3); letter-spacing: 0.04em; }
 .contact-reason { font-size: 12px; color: var(--ink2); line-height: 1.7; padding-top: 14px; border-top: 1px solid var(--border); }
@@ -275,7 +275,38 @@ function runGenerate(company, role) {
     return { type: 'image', source: { type: 'base64', media_type: u.data.split(';')[0].split(':')[1], data: u.data.split(',')[1] } };
   });
 
-  var system = 'You are an expert job search strategist. Your job: look at LinkedIn People page screenshots, identify the single best person to contact after someone has applied for a role, then write 3 targeted outreach messages.\n\nCONTACT SELECTION — strict priority order:\n1. Senior HR/Talent: Head of Talent, VP People, Director of Recruiting, Senior Talent Partner, Senior Recruiter, People Ops Lead. First choice always — they route applications and expect outreach.\n2. If no senior HR/Talent visible: hiring manager or team lead whose function matches the role.\n3. Very small company (<20 people) with no HR layer: co-founder, CRO, COO, or relevant VP.\n4. NEVER select: anyone with Associate, Coordinator, Analyst, Intern, or junior-sounding titles. Avoid anyone who appears early in their career or recently hired. Target people who appear established and senior.\n5. Do not default to the CEO unless the company is tiny with no better option.\n\nMESSAGE RULES:\n- Address by first name only\n- Hard limit: under 300 characters per message\n- No filler phrases whatsoever\n- Reference something specific and real about the company or role\n- Sound like a sharp human, not a template\n\nRespond ONLY with valid JSON, no markdown, no backticks:\n{"contact":{"name":"full name","title":"their title","initials":"two uppercase initials","reason":"2-3 sentences: why this person by the rules above and what in the screenshot confirmed it"},"messages":{"primary":"under 300 chars","direct":"under 200 chars — stripped down","hook":"under 280 chars — leads with a specific angle"}}';
+  var system = [
+    'You are an expert job search strategist. Your job: look at LinkedIn People page screenshots, identify the single best person to contact after someone has applied for a role, then write 3 targeted outreach messages.',
+    '',
+    'CONTACT SELECTION — strict priority order:',
+    '1. HIGHEST PRIORITY — Anyone whose visible bio or snippet explicitly mentions "hiring", "we\'re hiring", "building our team", or similar. Pick this person immediately.',
+    '2. Senior INTERNAL HR/Talent employee: Head of Talent, VP People, Director of Recruiting, Senior Talent Partner, Senior Recruiter. Must be a full-time employee — not a consultant or advisor.',
+    '3. If no senior HR/Talent: hiring manager or team lead whose function matches the role applied for.',
+    '4. Very small company under 20 people with no HR layer: co-founder, CRO, COO, or relevant VP.',
+    '',
+    'SENIORITY SIGNALS — prefer people with these:',
+    '- Visible "ex-[Company]" or "former [Title]" in their snippet = experienced professional, prioritize',
+    '- Snippet implies multiple years of senior experience = good',
+    '- Snippet looks like first or second job = deprioritize',
+    '',
+    'NEVER SELECT:',
+    '- Anyone with Advisor, Consultant, Fractional, or Contractor in their title — less internal pull',
+    '- Anyone with Associate, Coordinator, Analyst, or Intern in their title',
+    '- Anyone who appears early in their career or recently hired',
+    '- The CEO unless company is clearly under 15 people with no other option',
+    '',
+    'Pick exactly ONE person. Never suggest multiple. Be decisive.',
+    '',
+    'MESSAGE RULES:',
+    '- Address by first name only',
+    '- Hard limit: under 300 characters per message',
+    '- No filler phrases whatsoever',
+    '- Reference something specific and real about the company or role',
+    '- Sound like a sharp human, not a template',
+    '',
+    'Respond ONLY with valid JSON, no markdown, no backticks:',
+    '{"contact":{"name":"full name","title":"their title","initials":"two uppercase initials","reason":"2-3 sentences: why this person by the rules above and what in the screenshot confirmed it"},"messages":{"primary":"under 300 chars","direct":"under 200 chars — stripped down","hook":"under 280 chars — leads with a specific angle"}}'
+  ].join('\n');
 
   var userText = 'Company: ' + company + '\nRole applied to: ' + role + '\n\n' + uploads.length + ' screenshot(s) from ' + company + '\'s LinkedIn People page attached. Read every visible name and title. Apply selection rules. Pick one person. Write 3 message variants addressed to them by first name.';
 
